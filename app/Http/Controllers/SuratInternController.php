@@ -7,32 +7,29 @@ use App\Models\SuratIntern;
 
 class SuratInternController extends Controller
 {
-    /**
-     * Menampilkan daftar surat intern dengan fitur pencarian.
-     */
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $sort = $request->input('sort', 'asc'); // Default sorting adalah ascending
+        $column = $request->input('column', 'tanggal_masuk'); // Default column sorting
+
         $surats = SuratIntern::when($search, function ($query, $search) {
             return $query->where('nomor_surat', 'like', "%{$search}%")
                          ->orWhere('bagian', 'like', "%{$search}%")
                          ->orWhere('dari', 'like', "%{$search}%");
-        })->paginate(10);
+        })
+        ->orderBy($column, $sort) // Sorting dinamis berdasarkan kolom dan arah
+        ->paginate(10)
+        ->appends(['search' => $search, 'sort' => $sort, 'column' => $column]);
 
-        return view('surat_intern.index', compact('surats'));
+        return view('surat_intern.index', compact('surats', 'search', 'sort', 'column'));
     }
 
-    /**
-     * Menampilkan halaman form tambah surat intern.
-     */
     public function create()
     {
         return view('surat_intern.create');
     }
 
-    /**
-     * Menyimpan data surat intern yang baru.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -51,18 +48,12 @@ class SuratInternController extends Controller
         return redirect('/surat_intern')->with('status', 'Berhasil menambahkan surat intern!');
     }
 
-    /**
-     * Menampilkan halaman form edit surat intern.
-     */
     public function edit($id)
     {
         $surat = SuratIntern::findOrFail($id);
         return view('surat_intern.edit', compact('surat'));
     }
 
-    /**
-     * Mengupdate data surat intern yang sudah ada.
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -82,9 +73,6 @@ class SuratInternController extends Controller
         return redirect('/surat_intern')->with('status', 'Berhasil mengubah surat intern!');
     }
 
-    /**
-     * Menghapus data surat intern.
-     */
     public function destroy($id)
     {
         SuratIntern::findOrFail($id)->delete();

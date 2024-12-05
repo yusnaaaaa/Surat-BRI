@@ -28,6 +28,12 @@
             color: #0051A0;
             font-weight: 600;
         }
+        .dashboard-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body>
@@ -61,6 +67,13 @@
     <div class="container py-4">
         <div class="row text-center mb-4">
             <h2 class="welcome-title">Welcome To SuratBRI</h2>
+        </div>
+
+        <!-- Dashboard Image -->
+        <div class="row">
+        <div class="col text-center">
+            <img src="{{ asset('images/bg dashboard.png') }}" alt="Dashboard Image" class="dashboard-image" style="width: 47%; max-width: 700px; height: auto;">
+        </div>
         </div>
 
         <!-- Cards Section -->

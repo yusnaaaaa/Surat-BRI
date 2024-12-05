@@ -4,18 +4,15 @@
 <div class="container">
     <h1 class="mb-4 fw-bold" style="color: #0051A0; font-size: 1.5rem;">Daftar Surat Rahasia</h1>
 
-    <!-- Pesan Status -->
     @if (session('status'))
         <div class="alert alert-success">{{ session('status') }}</div>
     @endif
 
     <div class="mb-3 d-flex justify-content-between align-items-center">
-        <!-- Form Pencarian -->
         <form action="{{ route('surat_rahasia.index') }}" method="GET" class="d-flex">
             <input type="text" name="search" class="form-control me-2" placeholder="Cari surat rahasia..." value="{{ request('search') }}">
             <button type="submit" class="btn btn-primary" style="background-color: #0051A0; border-color: #0051A0;">Cari</button>
         </form>
-
         <div>
             <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
             <a href="/surat_rahasia/create" class="btn btn-primary" style="background-color: #0051A0; border-color: #0051A0;">Tambah Surat Rahasia</a>
@@ -23,19 +20,39 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover align-middle">
+        <table class="table table-bordered table-striped table-hover table-sm align-middle">
             <thead class="text-white" style="background-color: #0051A0;">
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal Masuk</th>
-                    <th>Tanggal Surat</th>
-                    <th>Bendel</th>
-                    <th>Dari</th>
-                    <th>Nomor Surat</th>
-                    <th>Perihal</th>
-                    <th>Masuk Ke</th>
-                    <th>Tanggal Keluar</th>
-                    <th>Disposisi</th>
+                    @foreach ([
+                        'no' => 'No',
+                        'tanggal_masuk' => 'Tanggal Masuk',
+                        'tanggal_surat' => 'Tanggal Surat',
+                        'bendel' => 'Bendel',
+                        'dari' => 'Dari',
+                        'nomor_surat' => 'Nomor Surat',
+                        'perihal' => 'Perihal',
+                        'masuk_ke' => 'Masuk Ke',
+                        'tanggal_keluar' => 'Tanggal Keluar',
+                        'disposisi' => 'Disposisi'
+                    ] as $column => $label)
+                        <th>
+                            <a href="{{ route('surat_rahasia.index', [
+                                'sort' => request('sort') === 'asc' && request('column') === $column ? 'desc' : 'asc',
+                                'column' => $column
+                            ]) }}" class="text-dark">
+                                {{ $label }}
+                                @if(request('column') === $column)
+                                    @if(request('sort') === 'asc')
+                                        <i class="bi bi-arrow-down"></i>
+                                    @elseif(request('sort') === 'desc')
+                                        <i class="bi bi-arrow-up"></i>
+                                    @endif
+                                @else
+                                    <i class="bi bi-arrow-down-up"></i>
+                                @endif
+                            </a>
+                        </th>
+                    @endforeach
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -70,11 +87,10 @@
         </table>
     </div>
 
-    <!-- Pagination -->
     <div class="d-flex justify-content-center mt-4">
         {{ $surats->links('pagination::bootstrap-5') }}
     </div>
-    <!-- Footer -->
+
     <footer class="bg-light text-center py-3 mt-4">
         <small>&copy; 2024 SuratBRI - All Rights Reserved</small>
     </footer>

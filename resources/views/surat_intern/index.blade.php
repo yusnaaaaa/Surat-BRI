@@ -22,18 +22,38 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover align-middle">
+        <table class="table table-bordered table-striped table-hover table-sm align-middle">
             <thead class="text-white" style="background-color: #0051A0;">
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal Masuk</th>
-                    <th>Bagian</th>
-                    <th>Dari</th>
-                    <th>Bendel</th>
-                    <th>Nomor Surat</th>
-                    <th>Perihal</th>
-                    <th>Masuk Ke</th>
-                    <th>Tanggal Kembali</th>
+                    @foreach([
+                        'no' => 'No',
+                        'tanggal_masuk' => 'Tanggal Masuk',
+                        'bagian' => 'Bagian',
+                        'dari' => 'Dari',
+                        'bendel' => 'Bendel',
+                        'nomor_surat' => 'Nomor Surat',
+                        'perihal' => 'Perihal',
+                        'masuk_ke' => 'Masuk Ke',
+                        'tanggal_kembali' => 'Tanggal Kembali'
+                    ] as $column => $label)
+                        <th>
+                            <a href="{{ route('surat_intern.index', [
+                                'sort' => request('sort') === 'asc' && request('column') === $column ? 'desc' : 'asc',
+                                'column' => $column
+                            ]) }}" class="text-dark">
+                                {{ $label }}
+                                @if(request('column') === $column)
+                                    @if(request('sort') === 'asc')
+                                        <i class="bi bi-arrow-down"></i>
+                                    @elseif(request('sort') === 'desc')
+                                        <i class="bi bi-arrow-up"></i>
+                                    @endif
+                                @else
+                                    <i class="bi bi-arrow-down-up"></i>
+                                @endif
+                            </a>
+                        </th>
+                    @endforeach
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -63,11 +83,6 @@
                         <td colspan="10" class="text-center">Tidak ada data surat intern</td>
                     </tr>
                 @endforelse
-
-                {{-- Pesan jika hasil pencarian kosong --}}
-                @if ($surats->isEmpty())
-                    <div class="alert alert-warning text-center">Tidak ada data yang sesuai dengan pencarian.</div>
-                @endif
             </tbody>
         </table>
     </div>
@@ -75,7 +90,6 @@
     <div class="d-flex justify-content-center mt-4">
         {{ $surats->links('pagination::bootstrap-5') }}
     </div>
-    <!-- Footer -->
     <footer class="bg-light text-center py-3 mt-4">
         <small>&copy; 2024 SuratBRI - All Rights Reserved</small>
     </footer>

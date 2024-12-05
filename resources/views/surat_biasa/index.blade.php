@@ -22,21 +22,41 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover align-middle">
+        <table class="table table-bordered table-striped table-hover table-sm align-middle">
             <thead class="text-white" style="background-color: #0051A0;">
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal Masuk</th>
-                    <th>No Registrasi</th>
-                    <th>Bendel</th>
-                    <th>Pengirim</th>
-                    <th>Nomor Surat</th>
-                    <th>Perihal</th>
-                    <th>Kepada</th>
-                    <th>Tanggal Keluar</th>
-                    <th>Disposisi</th>
-                    <th>Tindak Lanjut</th>
-                    <th>Tanggal Penyelesaian</th>
+                    @foreach ([
+                        'no' => 'No',
+                        'tanggal_masuk' => 'Tanggal Masuk',
+                        'no_reg' => 'No Registrasi',
+                        'bendel' => 'Bendel',
+                        'pengirim' => 'Pengirim',
+                        'nomor_surat' => 'Nomor Surat',
+                        'perihal' => 'Perihal',
+                        'kepada' => 'Kepada',
+                        'tanggal_keluar' => 'Tanggal Keluar',
+                        'disposisi' => 'Disposisi',
+                        'tindak_lanjut' => 'Tindak Lanjut',
+                        'tanggal_penyelesaian' => 'Tanggal Penyelesaian'
+                    ] as $column => $label)
+                        <th>
+                            <a href="{{ route('surat_biasa.index', [
+                                'sort' => request('sort') === 'asc' && request('column') === $column ? 'desc' : 'asc',
+                                'column' => $column
+                            ]) }}" class="text-dark">
+                                {{ $label }}
+                                @if(request('column') === $column)
+                                    @if(request('sort') === 'asc')
+                                        <i class="bi bi-arrow-down"></i>
+                                    @elseif(request('sort') === 'desc')
+                                        <i class="bi bi-arrow-up"></i>
+                                    @endif
+                                @else
+                                    <i class="bi bi-arrow-down-up"></i>
+                                @endif
+                            </a>
+                        </th>
+                    @endforeach
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -69,13 +89,7 @@
                         <td colspan="13" class="text-center">Tidak ada data surat biasa</td>
                     </tr>
                 @endforelse
-
-                {{-- Tambahkan ini untuk menampilkan pesan jika hasil pencarian kosong --}}
-                @if ($surats->isEmpty())
-                    <div class="alert alert-warning text-center">Tidak ada data yang sesuai dengan pencarian.</div>
-                @endif
             </tbody>
-
         </table>
     </div>
 

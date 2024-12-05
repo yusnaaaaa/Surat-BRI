@@ -9,15 +9,18 @@ class SuratBiasaController extends Controller
 {
     public function index(Request $request)
     {
-        // Mendapatkan input pencarian
+        // Mendapatkan input pencarian, filter, dan sort
         $search = $request->input('search');
+        $sort = $request->input('sort', 'asc'); // Default sorting adalah ascending
 
-        // Query untuk memfilter data surat
+        // Query untuk memfilter dan mengurutkan data surat
         $surats = SuratBiasa::when($search, function ($query, $search) {
             return $query->where('nomor_surat', 'like', "%{$search}%")
-                         ->orWhere('pengirim', 'like', "%{$search}%")
-                         ->orWhere('perihal', 'like', "%{$search}%");
-        })->paginate(10);
+                        ->orWhere('pengirim', 'like', "%{$search}%")
+                        ->orWhere('perihal', 'like', "%{$search}%");
+        })
+        ->orderBy('tanggal_masuk', $sort) // Sorting berdasarkan tanggal masuk
+        ->paginate(10);
 
         // Mengirimkan data ke view
         return view('surat_biasa.index', compact('surats'));
