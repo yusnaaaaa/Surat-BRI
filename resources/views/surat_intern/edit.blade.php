@@ -75,7 +75,7 @@
     </form>
     <!-- Footer -->
     <footer class="bg-light text-center py-3 mt-4">
-        <small>&copy; 2024 SuratBRI - All Rights Reserved</small>
+        <small>&copy; 2024 ITEDepartement - All Rights Reserved</small>
     </footer>
 </div>
 @endsection
