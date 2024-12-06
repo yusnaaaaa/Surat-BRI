@@ -12,19 +12,31 @@ class SuratBiasaController extends Controller
         // Mendapatkan input pencarian, filter, dan sort
         $search = $request->input('search');
         $sort = $request->input('sort', 'asc'); // Default sorting adalah ascending
-
+        $column = $request->input('column', 'tanggal_masuk'); // Default sorting column
+    
         // Query untuk memfilter dan mengurutkan data surat
         $surats = SuratBiasa::when($search, function ($query, $search) {
-            return $query->where('nomor_surat', 'like', "%{$search}%")
-                        ->orWhere('pengirim', 'like', "%{$search}%")
-                        ->orWhere('perihal', 'like', "%{$search}%");
+            return $query->where(function ($query) use ($search) {
+                // Pencarian pada semua atribut
+                $query->where('nomor_surat', 'like', "%{$search}%")
+                      ->orWhere('pengirim', 'like', "%{$search}%")
+                      ->orWhere('perihal', 'like', "%{$search}%")
+                      ->orWhere('bendel', 'like', "%{$search}%")
+                      ->orWhere('kepada', 'like', "%{$search}%")
+                      ->orWhere('disposisi', 'like', "%{$search}%")
+                      ->orWhere('tindak_lanjut', 'like', "%{$search}%")
+                      ->orWhere('tanggal_masuk', 'like', "%{$search}%")
+                      ->orWhere('tanggal_keluar', 'like', "%{$search}%")
+                      ->orWhere('tanggal_penyelesaian', 'like', "%{$search}%");
+            });
         })
-        ->orderBy('tanggal_masuk', $sort) // Sorting berdasarkan tanggal masuk
-        ->paginate(10);
-
+        ->orderBy($column, $sort) // Sorting dinamis berdasarkan kolom dan arah
+        ->paginate(10)
+        ->appends(['search' => $search, 'sort' => $sort, 'column' => $column]); // Menyimpan parameter ke link pagination
+    
         // Mengirimkan data ke view
-        return view('surat_biasa.index', compact('surats'));
-    }
+        return view('surat_biasa.index', compact('surats', 'search', 'sort', 'column'));
+    }    
 
     public function create()
     {

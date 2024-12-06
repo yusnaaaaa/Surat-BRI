@@ -93,7 +93,8 @@
         </table>
     </div>
 
-    <div class="d-flex justify-content-center mt-4">
+    <div>
+        <!-- Menampilkan pagination hanya di bagian kanan -->
         {{ $surats->links('pagination::bootstrap-5') }}
     </div>
     <!-- Footer -->

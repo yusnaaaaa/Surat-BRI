@@ -41,10 +41,10 @@
                                 'column' => $column
                             ]) }}" class="text-dark">
                                 {{ $label }}
-                                @if(request('column') === $column)
-                                    @if(request('sort') === 'asc')
+                                @if (request('column') === $column)
+                                    @if (request('sort') === 'asc')
                                         <i class="bi bi-arrow-down"></i>
-                                    @elseif(request('sort') === 'desc')
+                                    @elseif (request('sort') === 'desc')
                                         <i class="bi bi-arrow-up"></i>
                                     @endif
                                 @else
@@ -86,10 +86,11 @@
             </tbody>
         </table>
     </div>
-
-    <div class="d-flex justify-content-center mt-4">
-        {{ $surats->links('pagination::bootstrap-5') }}
-    </div>
+  
+        <div>
+            <!-- Menampilkan pagination hanya di bagian kanan -->
+            {{ $surats->links('pagination::bootstrap-5') }}
+        </div>
 
     <footer class="bg-light text-center py-3 mt-4">
         <small>&copy; 2024 SuratBRI - All Rights Reserved</small>

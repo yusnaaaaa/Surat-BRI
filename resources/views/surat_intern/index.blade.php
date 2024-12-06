@@ -86,10 +86,11 @@
             </tbody>
         </table>
     </div>
-
-    <div class="d-flex justify-content-center mt-4">
+    <div>
+        <!-- Menampilkan pagination hanya di bagian kanan -->
         {{ $surats->links('pagination::bootstrap-5') }}
     </div>
+        
     <footer class="bg-light text-center py-3 mt-4">
         <small>&copy; 2024 SuratBRI - All Rights Reserved</small>
     </footer>

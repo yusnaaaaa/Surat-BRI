@@ -12,18 +12,27 @@ class SuratInternController extends Controller
         $search = $request->input('search');
         $sort = $request->input('sort', 'asc'); // Default sorting adalah ascending
         $column = $request->input('column', 'tanggal_masuk'); // Default column sorting
-
+    
         $surats = SuratIntern::when($search, function ($query, $search) {
-            return $query->where('nomor_surat', 'like', "%{$search}%")
-                         ->orWhere('bagian', 'like', "%{$search}%")
-                         ->orWhere('dari', 'like', "%{$search}%");
+            // Pencarian pada semua kolom
+            return $query->where(function ($query) use ($search) {
+                $query->where('nomor_surat', 'like', "%{$search}%")
+                      ->orWhere('perihal', 'like', "%{$search}%")
+                      ->orWhere('dari', 'like', "%{$search}%")
+                      ->orWhere('bendel', 'like', "%{$search}%")
+                      ->orWhere('bagian', 'like', "%{$search}%")
+                      ->orWhere('masuk_ke', 'like', "%{$search}%")
+                      ->orWhere('tanggal_kembali', 'like', "%{$search}%")
+                      ->orWhere('tanggal_masuk', 'like', "%{$search}%");
+            });
         })
         ->orderBy($column, $sort) // Sorting dinamis berdasarkan kolom dan arah
         ->paginate(10)
-        ->appends(['search' => $search, 'sort' => $sort, 'column' => $column]);
-
+        ->appends(['search' => $search, 'sort' => $sort, 'column' => $column]); // Menambahkan parameter ke pagination link
+    
         return view('surat_intern.index', compact('surats', 'search', 'sort', 'column'));
     }
+    
 
     public function create()
     {

@@ -11,19 +11,28 @@ class SuratRahasiaController extends Controller
     {
         $search = $request->input('search');
         $sort = $request->input('sort', 'asc'); // Default sorting adalah ascending
-        $column = $request->input('column', 'tanggal_masuk'); // Default column sorting
-
+        $column = $request->input('column', 'tanggal_masuk'); // Default sorting column
+    
         $surats = SuratRahasia::when($search, function ($query, $search) {
-            return $query->where('nomor_surat', 'like', "%{$search}%")
-                         ->orWhere('dari', 'like', "%{$search}%")
-                         ->orWhere('perihal', 'like', "%{$search}%");
+            return $query->where(function ($query) use ($search) {
+                // Pencarian pada semua atribut
+                $query->where('nomor_surat', 'like', "%{$search}%")
+                      ->orWhere('dari', 'like', "%{$search}%")
+                      ->orWhere('perihal', 'like', "%{$search}%")
+                      ->orWhere('bendel', 'like', "%{$search}%")
+                      ->orWhere('masuk_ke', 'like', "%{$search}%")
+                      ->orWhere('disposisi', 'like', "%{$search}%")
+                      ->orWhere('tanggal_masuk', 'like', "%{$search}%")
+                      ->orWhere('tanggal_surat', 'like', "%{$search}%")
+                      ->orWhere('tanggal_keluar', 'like', "%{$search}%");
+            });
         })
         ->orderBy($column, $sort) // Sorting dinamis berdasarkan kolom dan arah
         ->paginate(10)
-        ->appends(['search' => $search, 'sort' => $sort, 'column' => $column]);
-
+        ->appends(['search' => $search, 'sort' => $sort, 'column' => $column]); // Menyimpan parameter untuk pagination
+    
         return view('surat_rahasia.index', compact('surats', 'search', 'sort', 'column'));
-    }
+    }    
 
     public function create()
     {

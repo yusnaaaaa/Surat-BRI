@@ -77,9 +77,5 @@
             <a href="{{ url('/surat_rahasia') }}" class="btn btn-secondary">Batal</a>
         </div>
     </form>
-    <!-- Footer -->
-    <footer class="bg-light text-center py-3 mt-4">
-        <small>&copy; 2024 SuratBRI - All Rights Reserved</small>
-    </footer>
 </div>
 @endsection
