@@ -93,7 +93,7 @@
         </div>
 
     <!-- Footer -->
-    <footer class="bg-light text-center py-3 mt-4">
+    <footer class="text-center py-3 mt-4" style="background-color: transparent;">
         <small>&copy; 2024 ITEDepartement - All Rights Reserved</small>
     </footer>
 </div>
